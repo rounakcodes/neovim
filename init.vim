@@ -43,7 +43,7 @@ else
  source $HOME/.config/nvim/plug-config/easymotion.vim
 endif
 
-" Experimental
+"  Experimental
 
 if !empty(glob("~/.config/nvim/paths.vim"))
   source $HOME/.config/nvim/paths.vim
