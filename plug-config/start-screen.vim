@@ -2,7 +2,7 @@
 let g:startify_custom_header = ["If every obstacle must be first overcome, then nothing will ever get done"]
 
 let g:startify_session_dir = '~/.config/nvim/session'
-let g:startify_custom_indices = ['&','[','{','}','(','=','*',')','+',']']
+let g:startify_custom_indices = ['{','}','*',')','+']
 
 let g:startify_lists = [
           \ { 'type': 'sessions',  'header': ['   Sessions']                     },
