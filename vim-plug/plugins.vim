@@ -35,13 +35,17 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     Plug 'asvetliakov/vim-easymotion'
 
   else
+    Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
     " Text Navigation
-    Plug 'justinmk/vim-sneak'
-    Plug 'unblevable/quick-scope'
-    " Plug 'easymotion/vim-easymotion'
+    " Plug 'justinmk/vim-sneak'
+    " Plug 'unblevable/quick-scope'
+    Plug 'easymotion/vim-easymotion'
+    Plug 'haya14busa/vim-easyoperator-line'
+    Plug 'haya14busa/vim-easyoperator-phrase'
     " Add some color
     Plug 'norcalli/nvim-colorizer.lua'
     Plug 'junegunn/rainbow_parentheses.vim'
+    Plug 'junegunn/limelight.vim'
     " Better Syntax Support
     Plug 'sheerun/vim-polyglot'
     " Cool Icons
@@ -71,6 +75,7 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     " Plug 'mhinz/vim-signify'
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'
+    Plug 'tpope/vim-abolish'
     Plug 'tpope/vim-rhubarb'
     Plug 'junegunn/gv.vim'
     " Terminal

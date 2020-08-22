@@ -13,7 +13,7 @@
   "diagnostic.warningSign": " ",
   "diagnostic.infoSign": "",
   "diagnostic.hintSign": " ",
-  // "diagnostic.virtualText": true, // this won't work with codelens when error on same line
+  "diagnostic.virtualText": true, // this won't work with codelens when error on same line
 
   // "diagnostic.displayByAle": true,
 
@@ -29,6 +29,7 @@
     "css",
     "markdown",
     "javascript",
+    "javascriptreact",
     "graphql",
     "html",
     "yaml",
@@ -48,9 +49,12 @@
   "python.jediPath": "~/.miniconda/envs/neovim/lib/python3.8/site-packages",
 
   // snippets
-  "snippets.ultisnips.directories": ["UltiSnips", "~/.config/nvim/snips"],
-  //"snippets.userSnippetsDirectory": "~/.config/nvim/snips",
-
+  //"snippets.ultisnips.directories": ["~/.config/nvim/snips"],
+  "snippets.userSnippetsDirectory": "~/.config/nvim/snips",
+  "snippets.extends": {
+    "javascriptreact": ["javascript"],
+    "typescript": ["javascript"]
+  },
   // emmet
   "emmet.includeLanguages": {
     "vue-html": "html",

@@ -1,13 +1,64 @@
+
+" replace word on current line
+function! ReplaceWordOnCurrentLine()
+  let name = expand("<cword>")
+  let newName = input("Replace case sensitively (l) :", name)
+  execute ":S/".name."/".newName."/g"
+endfunction
+
+" replace word case sensitively
+function! ReplaceWordCaseSensitive()
+  let name = expand("<cword>")
+  let newName = input("Replace case sensitively (g): ", name)
+  execute ":%S/".name."/".newName."/g"
+endfunction
+
+" replace word
+function! ReplaceWord()
+  " this function replaces below code
+  " nnoremap <Leader>r :%s/\<<C-r><C-w>\>/<C-r><C-w>/g<Left><Left> 
+  let name = expand("<cword>")
+  let newName = input("Replace (g): ", name)
+  execute ":%s/\\<".name."\\>/".newName."/g"
+endfunction
+
+" replace selection
+function! ReplaceSelection()
+  let name = getline("'<")[getpos("'<")[2]-1:getpos("'>")[2]-1]
+  let newName = input("Replace selection: ", name)
+  execute ":%s/".name."/".newName."/g"
+endfunction
+
+" create new file
+function! CreateNewFile() " {{{
+let result = input("New File Name:")
+  execute ':e %:h/' . trim(result)
+endfunction
+
+" run this function after creating non-existing dir
+function! CreateNewDir() " {{{
+  execute ':Mkdir %:h'
+endfunction
+
+" nnoremap <leader>% :call CopyCurrentFilePath()<CR>
+function! CopyCurrentFilePath() " {{{
+  let @+ = expand('%')
+  echo @+
+endfunction
+
 " Map leader to which_key
+" commands not requiring <CR> must be called as a function
 nnoremap <silent> <leader> :silent <c-u> :silent WhichKey '<Space>'<CR>
 vnoremap <silent> <leader> :silent <c-u> :silent WhichKeyVisual '<Space>'<CR>
 
 " Create map to add keys to
 let g:which_key_map =  {}
+
 " Define a separator
 let g:which_key_sep = '→'
-" set timeoutlen=100
 
+" After pressing leader, the guide buffer will pop up when there are no further keystrokes within timeoutlen.
+" set timeoutlen=2000
 
 " Not a fan of floating windows for this
 let g:which_key_use_floating_win = 0
@@ -26,25 +77,29 @@ autocmd  FileType which_key set laststatus=0 noshowmode noruler
 
 " Single mappings
 let g:which_key_map['/'] = [ ':call Comment()'            , 'comment' ]
-let g:which_key_map['.'] = [ ':e $MYVIMRC'                , 'open init' ]
-let g:which_key_map[';'] = [ ':Commands'                  , 'commands' ]
+let g:which_key_map[','] = [ ':wa'                , 'save all files' ]
+let g:which_key_map[':'] = [ ':Commands'                  , 'commands' ]
 let g:which_key_map['='] = [ '<C-W>='                     , 'balance windows' ]
-let g:which_key_map[','] = [ 'Startify'                   , 'start screen' ]
+let g:which_key_map['.'] = [ 'Startify'                   , 'start screen' ]
 let g:which_key_map['d'] = [ ':bd'                        , 'delete buffer']
-let g:which_key_map['e'] = [ ':CocCommand explorer'       , 'explorer' ]
-let g:which_key_map['f'] = [ ':Files'                     , 'search files' ]
-let g:which_key_map['h'] = [ '<C-W>s'                     , 'split below']
+" let g:which_key_map['e'] = [ ':CocCommand explorer'       , 'explorer' ]
+let g:which_key_map[' '] = [ ':Files'                     , 'search files' ]
+let g:which_key_map['H'] = [ '<C-W>s'                     , 'split below']
 let g:which_key_map['q'] = [ 'q'                          , 'quit' ]
-let g:which_key_map['r'] = [ ':RnvimrToggle'              , 'ranger' ]
+" let g:which_key_map['r'] = [ ':call ReplaceSelection()'              , 'rename' ]
 let g:which_key_map['S'] = [ ':SSave'                     , 'save session' ]
 let g:which_key_map['T'] = [ ':Rg'                        , 'search text' ]
 let g:which_key_map['v'] = [ '<C-W>v'                     , 'split right']
-let g:which_key_map['W'] = [ 'w'                          , 'write' ]
+" let g:which_key_map['w'] = [ 'w'                          , 'write' ]
 let g:which_key_map['z'] = [ 'Goyo'                       , 'zen' ]
+" let g:which_key_map['b'] = [ ':Buffers'                       , 'buffers' ]
+let g:which_key_map['h'] = [ ':History'                       , 'history' ]
+
+" replace word
+" nnoremap <Leader>r :%s/\<<C-r><C-w>\>/<C-r><C-w>/g<Left><Left> 
 
 " Group mappings
 
-" a is for actions
 let g:which_key_map.a = {
       \ 'name' : '+actions' ,
       \ 'c' : [':ColorizerToggle'        , 'colorizer'],
@@ -57,21 +112,36 @@ let g:which_key_map.a = {
       \ 'V' : [':Codi!'                  , 'virtual repl off'],
       \ }
 
-" b is for buffer
-let g:which_key_map.b = {
-      \ 'name' : '+buffer' ,
-      \ '1' : ['b1'        , 'buffer 1']        ,
-      \ '2' : ['b2'        , 'buffer 2']        ,
-      \ 'd' : ['bd'        , 'delete-buffer']   ,
-      \ 'f' : ['bfirst'    , 'first-buffer']    ,
-      \ 'h' : ['Startify'  , 'home-buffer']     ,
-      \ 'l' : ['blast'     , 'last-buffer']     ,
-      \ 'n' : ['bnext'     , 'next-buffer']     ,
-      \ 'p' : ['bprevious' , 'previous-buffer'] ,
-      \ '?' : ['Buffers'   , 'fzf-buffer']      ,
+let g:which_key_map.d = {
+      \ 'name' : '+delete' ,
+      \ '$' : ['ld$'        , 'delete after'],
+      \ '^' : ['hd^'        , 'delete before'],
+      \ 'd' : [':call delete(expand("%")) | bdelete!', 'delete current file and remove buffer'],
       \ }
 
-" s is for search
+let g:which_key_map.n = {
+      \ 'name' : '+new' ,
+      \ 'd' : [':call CreateNewDir()'         , 'new directory'],
+      \ 'n' : [':call CreateNewFile()'        , 'new file']
+      \ }
+
+let g:which_key_map.p = {
+      \ 'name' : '+paste' ,
+      \ 'y' : ['\"yp'                                , 'yank current word to register y'],
+      \ '{' : ['\"rp'        , 'replace with register {'],
+      \ '}' : ['\"sp'        , 'replace with register }'],
+      \ }
+
+let g:which_key_map.r = {
+      \ 'name' : '+replace' ,
+      \ 's' : [ ':call ReplaceSelection()'              , 'replace selection (global)' ],
+      \ 'i' : [ ':call ReplaceWord()'                   , 'replace word (g)' ],
+      \ 'c' : [ ':call ReplaceWordCaseSensitive()'      , 'replace word case sensitively (g)' ],
+      \ 'l' : [ ':call ReplaceWordOnCurrentLine()'      , 'replace word case sensitively (l)' ],
+      \ '{' : ['dd\"rP'        , 'replace with register {'],
+      \ '}' : ['dd\"sP'        , 'replace with register }'],
+      \ }
+
 let g:which_key_map.s = {
       \ 'name' : '+search' ,
       \ '/' : [':History/'              , 'history'],
@@ -95,14 +165,76 @@ let g:which_key_map.s = {
       \ 'S' : [':Colors'                , 'color schemes'],
       \ 't' : [':Rg'                    , 'text Rg'],
       \ 'T' : [':BTags'                 , 'buffer tags'],
-      \ 'w' : [':Windows'               , 'search windows'],
+      \ 'w' : ['ysiw'                   , 'surround word'],
+      \ 'W' : [':Windows'               , 'search windows'],
       \ 'y' : [':Filetypes'             , 'file types'],
       \ 'z' : [':FZF'                   , 'FZF'],
       \ }
       " \ 's' : [':Snippets'     , 'snippets'],
 
+let g:which_key_map.t = {
+      \ 'name' : '+terminal' ,
+      \ ';' : [':FloatermNew --wintype=popup --height=6'        , 'terminal'],
+      \ 'f' : [':FloatermNew fzf'                               , 'fzf'],
+      \ 'g' : [':FloatermNew lazygit'                           , 'git'],
+      \ 'd' : [':FloatermNew lazydocker'                        , 'docker'],
+      \ 'n' : [':FloatermNew node'                              , 'node'],
+      \ 'N' : [':FloatermNew nnn'                               , 'nnn'],
+      \ 'p' : [':FloatermNew python'                            , 'python'],
+      \ 'r' : [':FloatermNew ranger'                            , 'ranger'],
+      \ 't' : [':FloatermToggle'                                , 'toggle'],
+      \ 'y' : [':FloatermNew top'                               , 'top'],
+      \ 's' : [':FloatermNew ncdu'                              , 'ncdu'],
+      \ }
+
+let g:which_key_map['w'] = {
+      \ 'name' : '+windows' ,
+      \ 'w' : ['<C-W>w'     , 'other-window']          ,
+      \ 'd' : ['<C-W>c'     , 'delete-window']         ,
+      \ '-' : ['<C-W>s'     , 'split-window-below']    ,
+      \ '|' : ['<C-W>v'     , 'split-window-right']    ,
+      \ '2' : ['<C-W>v'     , 'layout-double-columns'] ,
+      \ 'h' : ['<C-W>h'     , 'window-left']           ,
+      \ 'j' : ['<C-W>j'     , 'window-below']          ,
+      \ 'l' : ['<C-W>l'     , 'window-right']          ,
+      \ 'k' : ['<C-W>k'     , 'window-up']             ,
+      \ 'H' : ['<C-W>5<'    , 'expand-window-left']    ,
+      \ 'J' : [':resize +5'  , 'expand-window-below']   ,
+      \ 'L' : ['<C-W>5>'    , 'expand-window-right']   ,
+      \ 'K' : [':resize -5'  , 'expand-window-up']      ,
+      \ '=' : ['<C-W>='     , 'balance-window']        ,
+      \ 's' : ['<C-W>s'     , 'split-window-below']    ,
+      \ 'v' : ['<C-W>v'     , 'split-window-below']    ,
+      \ '?' : ['Windows'    , 'fzf-window']            ,
+      \ }
+
+let g:which_key_map.y = {
+      \ 'name' : '+yank' ,
+      \ 'a' : [':%y'                                , 'yank entire buffer'],
+      \ 'f' : [':echo "use :saveas to get path completion and other benefits"'        , 'yank current file: use :saveas to get path completion and other benefits'],
+      \ 'p' : [':call CopyCurrentFilePath()'        , 'yank current file path'],
+      \ 'w' : ['\"yyiw'                                , 'yank current word to register y'],
+      \ 'y' : ['\"yyy'                                , 'yank current line to register y'],
+      \ '{' : ['\"ryy'        , 'yank current line to register {'],
+      \ '}' : ['\"syy'        , 'yank current line to register }'],
+      \ }
+
+" B is for buffer
+let g:which_key_map.B = {
+      \ 'name' : '+buffer' ,
+      \ '1' : ['b1'        , 'buffer 1']        ,
+      \ '2' : ['b2'        , 'buffer 2']        ,
+      \ 'd' : ['bd'        , 'delete-buffer']   ,
+      \ 'f' : ['bfirst'    , 'first-buffer']    ,
+      \ 'h' : ['Startify'  , 'home-buffer']     ,
+      \ 'l' : ['blast'     , 'last-buffer']     ,
+      \ 'n' : ['bnext'     , 'next-buffer']     ,
+      \ 'p' : ['bprevious' , 'previous-buffer'] ,
+      \ '?' : ['Buffers'   , 'fzf-buffer']      ,
+      \ }
+
 " g is for git
-let g:which_key_map.g = {
+let g:which_key_map.G = {
       \ 'name' : '+git' ,
       \ 'a' : [':Git add .'                        , 'add all'],
       \ 'A' : [':Git add %'                        , 'add current'],
@@ -130,7 +262,7 @@ let g:which_key_map.g = {
       \ }
 
 " l is for language server protocol
-let g:which_key_map.l = {
+let g:which_key_map.L = {
       \ 'name' : '+lsp' ,
       \ '.' : [':CocConfig'                          , 'config'],
       \ ';' : ['<Plug>(coc-refactor)'                , 'refactor'],
@@ -168,24 +300,8 @@ let g:which_key_map.l = {
       \ 'Z' : [':CocEnable'                          , 'enable CoC'],
       \ }
 
-" t is for terminal
-let g:which_key_map.t = {
-      \ 'name' : '+terminal' ,
-      \ ';' : [':FloatermNew --wintype=popup --height=6'        , 'terminal'],
-      \ 'f' : [':FloatermNew fzf'                               , 'fzf'],
-      \ 'g' : [':FloatermNew lazygit'                           , 'git'],
-      \ 'd' : [':FloatermNew lazydocker'                        , 'docker'],
-      \ 'n' : [':FloatermNew node'                              , 'node'],
-      \ 'N' : [':FloatermNew nnn'                               , 'nnn'],
-      \ 'p' : [':FloatermNew python'                            , 'python'],
-      \ 'r' : [':FloatermNew ranger'                            , 'ranger'],
-      \ 't' : [':FloatermToggle'                                , 'toggle'],
-      \ 'y' : [':FloatermNew ytop'                              , 'ytop'],
-      \ 's' : [':FloatermNew ncdu'                              , 'ncdu'],
-      \ }
-
 " w is for wiki
-let g:which_key_map.w = {
+let g:which_key_map.W = {
       \ 'name' : '+wiki' ,
       \ 'w' : ['<Plug>VimwikiIndex'                              , 'ncdu'],
       \ 'n' : ['<plug>(wiki-open)'                              , 'ncdu'],
@@ -205,31 +321,8 @@ let g:which_key_map.w = {
       \ 'U' : ['<plug>(wiki-list-uniq-local)'                              , 'ncdu'],
       \ }
 
-" Global
-" <Plug>VimwikiIndex
-" <Plug>VimwikiTabIndex
-" <Plug>VimwikiUISelect
-" <Plug>VimwikiDiaryIndex
-" <Plug>VimwikiMakeDiaryNote
-" <Plug>VimwikiTabMakeDiaryNote
-" <Plug>VimwikiMakeYesterdayDiaryNote
-" <Plug>VimwikiMakeTomorrowDiaryNote
-"
-" " Local
-" <Plug>Vimwiki2HTML
-" <Plug>Vimwiki2HTMLBrowse
-" <Plug>VimwikiDiaryGenerateLinks
-" <Plug>VimwikiFollowLink
-" <Plug>VimwikiSplitLink
-" <Plug>VimwikiVSplitLink
-" <Plug>VimwikiTabnewLink
-" <Plug>VimwikiGoBackLink
-" <Plug>VimwikiNextLink
-" <Plug>VimwikiPrevLink
-" <Plug>VimwikiGoto
-" <Plug>VimwikiDeleteLink
-" <Plug>VimwikiRenameLink
-" <Plug>VimwikiAddHeaderLevel
-
 " Register which key map
 call which_key#register('<Space>', "g:which_key_map")
+
+" notes
+" use `backspace` key to see upper-level menu items

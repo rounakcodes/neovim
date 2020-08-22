@@ -23,6 +23,7 @@ if !exists('g:vscode')
   set autoindent                          " Good auto indent
   set laststatus=2                        " Always display the status line
   set number                              " Line numbers
+  " set relativenumber
   set cursorline                          " Enable highlighting of the current line
   set background=dark                     " tell vim what the background color looks like
   set showtabline=2                       " Always show tabs 
@@ -36,7 +37,8 @@ if !exists('g:vscode')
   set clipboard=unnamedplus               " Copy paste between vim and everything else
   set incsearch
   set guifont=Fira\ Code\ Nerd\ Font
-  " let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  set nohlsearch                          " don't highlight search result
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
   " set mmp=1300
   " set autochdir                           " Your working directory will always be the same as your working directory
   " set foldcolumn=2                        " Folding abilities
@@ -45,8 +47,9 @@ if !exists('g:vscode')
   autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 
-  " You can't stop me
-  cmap w!! w !sudo tee %
 endif
 
-
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g`\"" | endif
+endif

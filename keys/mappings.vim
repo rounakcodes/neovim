@@ -1,10 +1,38 @@
+" swap v and V
+nnoremap v <S-v>
+nnoremap <S-v> v
 
-imap <C-h> <C-w>h
-imap <C-j> <C-w>j
-imap <C-k> <C-w>k
-imap <C-l> <C-w>l
+" You can't stop me
+cmap w!! w !sudo tee %
+
+" rf for refresh and considering placement of keys on Dvorak
+nnoremap rf :source $MYVIMRC<CR>
+
+ " press enter key to create a new line below and maintain normal mode
+nmap <CR> o<Esc>
+
+"swap words
+nnoremap <silent> gl "_yiw:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><c-o>/\w\+\_W\+<CR><c-l>
+nnoremap <silent> gh "_yiw?\w\+\_W\+\%#<CR>:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><c-o><c-l>
+
+" add and commit current file
+nnoremap gc :Gcommit %<CR>
+
+" scroll
+nnoremap jk <C-f>zz
+nnoremap kj <C-b>zz
+
+" Keep search results at the center of screen
+nmap n nzz
+nmap N Nzz
+nmap * *zz
+nmap # #zz
+nmap g* g*zz
+nmap g# g#zz
+
 " g Leader key
 let mapleader=" "
+
 " let localleader=" "
 nnoremap <Space> <Nop>
 
@@ -12,24 +40,16 @@ nnoremap <Space> <Nop>
 vnoremap < <gv
 vnoremap > >gv
 
+inoremap <expr> \ search('\%#[]>)}]', 'n') ? '<Right>' : "\\"
+
 if exists('g:vscode')
-
-" Simulate same TAB behavior in VSCode
-nmap <Tab> :Tabnext<CR>
-nmap <S-Tab> :Tabprev<CR>
-
+  " Simulate same TAB behavior in VSCode
+  nmap <Tab> :Tabnext<CR>
+  nmap <S-Tab> :Tabprev<CR>
 else
   " Better nav for omnicomplete
   inoremap <expr> <c-j> ("\<C-n>")
   inoremap <expr> <c-k> ("\<C-p>")
-
-  " I hate escape more than anything else
-  inoremap jk <Esc>
-  inoremap kj <Esc>
-
-  " Easy CAPS
-  " inoremap <c-u> <ESC>viwUi
-  " nnoremap <c-u> viwU<Esc>
 
   " TAB in general mode will move to text buffer
   nnoremap <silent> <TAB> :bnext<CR>
@@ -44,13 +64,12 @@ else
 
   " Alternate way to save
   nnoremap <silent> <C-s> :w<CR>
+
   " Alternate way to quit
-  nnoremap <silent> <C-Q> :wq!<CR>
-  " Use control-c instead of escape
-  nnoremap <silent> <C-c> <Esc>
+  nnoremap <silent> <C-Q> :q<CR>
+
   " <TAB>: completion.
   inoremap <silent> <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-
 
   " Better window navigation
   nnoremap <C-h> <C-w>h
@@ -58,21 +77,11 @@ else
   nnoremap <C-k> <C-w>k
   nnoremap <C-l> <C-w>l
 
-  " Terminal window navigation
-  tnoremap <C-h> <C-\><C-N><C-w>h
-  tnoremap <C-j> <C-\><C-N><C-w>j
-  tnoremap <C-k> <C-\><C-N><C-w>k
-  tnoremap <C-l> <C-\><C-N><C-w>l
-  inoremap <C-h> <C-\><C-N><C-w>h
-  inoremap <C-j> <C-\><C-N><C-w>j
-  inoremap <C-k> <C-\><C-N><C-w>k
-  inoremap <C-l> <C-\><C-N><C-w>l
-  tnoremap <Esc> <C-\><C-n>
-
   " Use alt + hjkl to resize windows
   nnoremap <silent> <M-j>    :resize -2<CR>
   nnoremap <silent> <M-k>    :resize +2<CR>
   nnoremap <silent> <M-h>    :vertical resize -2<CR>
   nnoremap <silent> <M-l>    :vertical resize +2<CR>
+
 endif
 

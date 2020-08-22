@@ -1,19 +1,14 @@
 
-let g:startify_custom_header = [
-        \ '       _  __     _         __  ___         __     ___ ',
-        \ '      / |/ /  __(_)_ _    /  |/  /__ _____/ /    |_  |',
-        \ '     /    / |/ / /  ` \  / /|_/ / _ `/ __/ _ \  / __/ ',
-        \ '    /_/|_/|___/_/_/_/_/ /_/  /_/\_,_/\__/_//_/ /____/ ',
-        \]
+let g:startify_custom_header = ["If every obstacle must be first overcome, then nothing will ever get done"]
 
 let g:startify_session_dir = '~/.config/nvim/session'
-
+let g:startify_custom_indices = ['&','[','{','}','(','=','*',')','+',']']
 
 let g:startify_lists = [
-          \ { 'type': 'files',     'header': ['   Files']                        },
-          \ { 'type': 'dir',       'header': ['   Current Directory '. getcwd()] },
           \ { 'type': 'sessions',  'header': ['   Sessions']                     },
           \ { 'type': 'bookmarks', 'header': ['   Bookmarks']                    },
+          \ { 'type': 'files',     'header': ['   Files']                        },
+          \ { 'type': 'dir',       'header': ['   Current Directory '. getcwd()] },
           \ ]
 
 
@@ -30,12 +25,17 @@ function! StartifyEntryFormat()
     endfunction
 
 let g:startify_bookmarks = [
-            \ { 'c': '~/.config/i3/config' },
+            \ { 'p': '~/.config/nvim/vim-plug/plugins.vim'},
+            \ { 's': '~/.config/nvim/general/settings.vim'},
+            \ { 'f': '~/.config/nvim/general/functions.vim'},
+            \ { 'm': '~/.config/nvim/keys/mappings.vim'},
+            \ { 'w': '~/.config/nvim/keys/which-key.vim'},
+            \ { 'c': '~/.config/nvim/coc-settings.json' },
             \ { 'i': '~/.config/nvim/init.vim' },
             \ { 'z': '~/.zshrc' },
-            \ '~/Blog',
-            \ '~/Code',
-            \ '~/Pics',
+            \ '~/Downloads',
+            \ '~/Desktop',
+            \ '~/.config/nvim/plug-config/start-screen.vim',
             \ ]
 
 let g:startify_enable_special = 0
