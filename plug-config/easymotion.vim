@@ -13,13 +13,13 @@ map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 " map  f <Plug>(easymotion-f)
 " end of word backward
-map <Leader>g   <Plug>(easymotion-ge)
+map <Leader>}  <Plug>(easymotion-ge)
 " end of word forward
-map <Leader>e   <Plug>(easymotion-e)
+map <Leader>)   <Plug>(easymotion-e)
 " beginning of word backward
-map <Leader>b   <Plug>(easymotion-b)
+map <Leader>{  <Plug>(easymotion-b)
 " beginning of word forward
-map <Leader>w   <Plug>(easymotion-w)
+map <Leader>*   <Plug>(easymotion-w)
 " Set the keys to be used for motion targets.
 let g:EasyMotion_keys = 'aoeuidhns-p.,gcr[{}(=)+qjkxbwvz@`t'
 " disable text shading
