@@ -85,5 +85,11 @@ else
   nnoremap <silent> <M-h>    :vertical resize -2<CR>
   nnoremap <silent> <M-l>    :vertical resize +2<CR>
 
+  " terminal in neovim
+  tnoremap <C-w>h <C-\><C-n><C-w>h
+  tnoremap <C-w>j <C-\><C-n><C-w>j
+  tnoremap <C-w>k <C-\><C-n><C-w>k
+  tnoremap <C-w>l <C-\><C-n><C-w>l
+
 endif
 

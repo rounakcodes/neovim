@@ -46,6 +46,11 @@ if !exists('g:vscode')
   " au! BufWritePost $MYVIMRC source %      " auto source when writing to init.vm alternatively you can run :source $MYVIMRC
   autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
+  " hide terminal
+  augroup custom_term
+      autocmd!
+      autocmd TermOpen * setlocal bufhidden=hide
+  augroup END
 
 endif
 
